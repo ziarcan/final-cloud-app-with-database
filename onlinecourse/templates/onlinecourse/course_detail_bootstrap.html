@@ -72,9 +72,10 @@
             {% if user.is_authenticated %}
             <button type="button" class="btn btn-primary btn-block" data-toggle="collapse" data-target="#exam">Start Exam</button>
                 <div id="exam" class="collapse">
-                    {% if course.question_list %}
+                    {% if course %}
                         <div class="container">
                             <div class="card-deck">
+                                {{ course }}
                             </div>
                         </div>    
                     {% else %}
