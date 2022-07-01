@@ -68,7 +68,22 @@
             <!-- <HINT> Each example will have many questions -->
 
             <!-- <HINT> Each question will have many choices -->
-
+            
+            {% if user.is_authenticated %}
+            <button type="button" class="btn btn-primary btn-block" data-toggle="collapse" data-target="#exam">Start Exam</button>
+                <div id="exam" class="collapse">
+                    {% if course.question_list %}
+                        <div class="container">
+                            <div class="card-deck">
+                            </div>
+                        </div>    
+                    {% else %}
+                        <p>No questions are available.</p>
+                    {% endif %}        
+                </div>    
+            {% else %}
+                <p>User is not authenticated.</p>
+            {% endif %}   
 
             <!-- <HINT> Create a form to collect the selected choices for all questions -->
             <!-- <HINT> For each question choice, you may create a checkbox input like
