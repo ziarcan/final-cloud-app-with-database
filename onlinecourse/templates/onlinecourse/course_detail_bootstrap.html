@@ -73,10 +73,22 @@
             <button type="button" class="btn btn-primary btn-block" data-toggle="collapse" data-target="#exam">Start Exam</button>
                 <div id="exam" class="collapse">
                     {% if course %}
-                        <div class="container">
-                            <div class="card-deck">
-                                {{ course.question_set.all }}
-                            </div>
+                        <div class="container-fluid">
+                            <div class="card-columns-vertical">
+                                {% for question in course.question_set.all %}
+                                    <div class="card mt-1">
+                                        <div class="card-header"><h5>{{question.question_text}}</h5></div>
+                                        <div class="card-body">
+                                            {% for choice in question.choice_set.all %}
+                                                <div>
+                                                    <input type="checkbox" id="choice" name="choice" value="true">
+                                                    <label>{{ choice.choice_content }}</label>        
+                                                </div>    
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>    
                         </div>    
                     {% else %}
                         <p>No questions are available.</p>
