@@ -81,7 +81,7 @@
                                         <div class="card-body">
                                             {% for choice in question.choice_set.all %}
                                                 <div>
-                                                    <input type="checkbox" id="choice" name="choice" value="true">
+                                                    <input type="checkbox" id="{{choice.id}}" name="{{choice.id}}" value="true">
                                                     <label>{{ choice.choice_content }}</label>        
                                                 </div>    
                                             {% endfor %}
