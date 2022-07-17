@@ -75,7 +75,7 @@
                     {% if course %}
                         <div class="container">
                             <div class="card-deck">
-                                {{ course }}
+                                {{ course.question_set.all }}
                             </div>
                         </div>    
                     {% else %}
