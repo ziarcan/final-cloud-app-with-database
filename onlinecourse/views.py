@@ -138,6 +138,18 @@ def extract_answers(request):
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
 #def show_exam_result(request, course_id, submission_id):
-
+def show_exam_result(request, course_id, submission_id):
+    course = get_object_or_404(Course, pk=course_id)
+    submission = get_object_or_404(Submission, pk=submission_id)
+    choices = submission.choices.all()
+    total_mark, mark = 1, 1
+    
+    return render(
+        request,
+        'onlinecourse/exam_result_bootstrap.html', {"course":course, "choices":choices,"mark":mark, 
+            "total_mark": total_mark, 
+            "submission": submission,
+            "grade": int((mark / total_mark) * 100) }
+    )
 
 
