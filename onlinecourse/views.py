@@ -146,10 +146,7 @@ def show_exam_result(request, course_id, submission_id):
     
     return render(
         request,
-        'onlinecourse/exam_result_bootstrap.html', {"course":course, "choices":choices,"mark":mark, 
-            "total_mark": total_mark, 
-            "submission": submission,
-            "grade": int((mark / total_mark) * 100) }
+        'onlinecourse/exam_result_bootstrap.html', {}
     )
 
 
