@@ -57,14 +57,14 @@
                     {% csrf_token %}
                     <div class="card-body">
                         {% for choice in question.choice_set.all %}
-                            {% if choice.is_correct and choice.id in submission_answers %}
-                                <span>Correct answer: {{choice.choice_text}}</span>
-                            {% elif choice.is_correct and choice.id not in submission_answers %}
-                                <span>Not selected: {{choice.choice_text}}</span>
-                            {% elif !choice.is_correct and choice.id in submission_answers %}
-                                <span>Wrong answer: {{choice.choice_text}}</span>
+                            {% if choice.is_correct and choice in submission_answers %}
+                                <div style="color:limegreen;"><strong>Correct answer: {{choice.choice_content}}</strong></div>
+                            {% elif choice.is_correct and choice not in submission_answers %}
+                                <div style="color:orange;"><strong>Not selected: {{choice.choice_content}}</strong></div>
+                            {% elif not choice.is_correct and choice in submission_answers %}
+                                <div style="color:red;"><strong>Wrong answer: {{choice.choice_content}}</strong></div>
                             {% else %}
-                                <span>{{choice.choice_text}}</span>
+                                <div><strong>{{choice.choice_content}}</strong></div>
                             {% endif %}
                         {% endfor %}
                     </div>
