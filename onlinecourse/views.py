@@ -155,7 +155,8 @@ def show_exam_result(request, course_id, submission_id):
             submission_grade_marks += question.grade_mark
         total_grade_marks += question.grade_mark
     grade = (submission_grade_marks / total_grade_marks) * 100
-    params = {"grade": grade, "course": course, "submission_answers": submission_answers}
+    grade_to_int = int(grade)
+    params = {"grade": grade, "grade_to_int": grade_to_int, "course": course, "submission_answers": submission_answers}
     return render(
         request,
         'onlinecourse/exam_result_bootstrap.html', params
