@@ -1,15 +1,19 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
 # <HINT> Import any new Models here
-from .models import Course, Enrollment, Question, Choice, Submission
+import logging
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
-from django.contrib.auth import login, logout, authenticate
-import logging
+
+# <HINT> Import any new Models here
+from .models import Course, Enrollment, Choice, Submission
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
 # Create your views here.
 
 
@@ -105,12 +109,12 @@ def enroll(request, course_id):
 
 # <HINT> Create a submit view to create an exam submission record for a course enrollment,
 # you may implement it based on following logic:
-         # Get user and course object, then get the associated enrollment object created when the user enrolled the course
-         # Create a submission object referring to the enrollment
-         # Collect the selected choices from exam form
-         # Add each selected choice object to the submission object
-         # Redirect to show_exam_result with the submission id
-#def submit(request, course_id):
+# Get user and course object, then get the associated enrollment object created when the user enrolled the course
+# Create a submission object referring to the enrollment
+# Collect the selected choices from exam form
+# Add each selected choice object to the submission object
+# Redirect to show_exam_result with the submission id
+# def submit(request, course_id):
 def submit(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
@@ -120,6 +124,7 @@ def submit(request, course_id):
     submission.choices.set(extracted_answers)
     submission.save()
     return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course_id, submission.id,)))
+
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
 def extract_answers(request):
@@ -131,21 +136,27 @@ def extract_answers(request):
             submitted_anwsers.append(Choice.objects.get(id=choice_id))
     return submitted_anwsers
 
+
 # <HINT> Create an exam result view to check if learner passed exam and show their question results and result for each question,
 # you may implement it based on the following logic:
-        # Get course and submission based on their ids
-        # Get the selected choice ids from the submission record
-        # For each selected choice, check if it is a correct answer or not
-        # Calculate the total score
-#def show_exam_result(request, course_id, submission_id):
+# Get course and submission based on their ids
+# Get the selected choice ids from the submission record
+# For each selected choice, check if it is a correct answer or not
+# Calculate the total score
+# def show_exam_result(request, course_id, submission_id):
 def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
     submission = get_object_or_404(Submission, pk=submission_id)
-    choices = submission.choices.all()
-    
+    submission_answers = submission.choices.all()
+    total_grade_marks = 0
+    submission_grade_marks = 0
+    for question in course.question_set.all():
+        if question.is_get_score(submission_answers):
+            submission_grade_marks += question.grade_mark
+        total_grade_marks += question.grade_mark
+    grade = (submission_grade_marks / total_grade_marks) * 100
+    params = {"grade": grade, "course": course, "submission_answers": submission_answers}
     return render(
         request,
-        'onlinecourse/exam_result_bootstrap.html', {}
+        'onlinecourse/exam_result_bootstrap.html', params
     )
-
-
